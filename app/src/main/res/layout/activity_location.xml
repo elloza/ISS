@@ -43,6 +43,7 @@
             android:background="@color/gray"
             android:weightSum="1">
 
+
             <TextView
                 android:paddingTop="10dp"
                 android:paddingLeft="5dp"
