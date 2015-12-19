@@ -1,0 +1,18 @@
+<resources>
+
+
+    <string name="app_name">ISS</string>
+
+    <!--LocationActivity -->
+    <string name="location_activity_action_settings">Settings</string>
+    <string name="location_activity_action_info_licenses">Licensing</string>
+    <string name="location_activity_toolbar_title">Upcoming ISS passes</string>
+    <string name="location_activity_address_not_found">Address not found</string>
+    <string name="location_activity_location_not_set">Location not set yet</string>
+    <string name="location_activity_you_are_in">You are in:</string>
+
+    <!--DetailPasseActivity -->
+
+
+
+</resources>
