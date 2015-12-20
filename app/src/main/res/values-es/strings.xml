@@ -1,0 +1,47 @@
+<resources>
+
+    <string name="app_name">ISS</string>
+
+    <!--LocationActivity -->
+    <string name="location_activity_action_settings">Opciones</string>
+    <string name="location_activity_action_info_licenses">Licencias</string>
+    <string name="location_activity_toolbar_title">Próximos sobrevuelos</string>
+    <string name="location_activity_address_not_found">Dirección no encontrada</string>
+    <string name="location_activity_location_not_set">Posición actual no encontrada</string>
+    <string name="location_activity_you_are_in">Estás en:</string>
+    <string name="location_activity_not_passes_availables">Sobrevuelos no disponibles</string>
+    <string name="location_activity_address_error">Error en el ReverseGeocoding</string>
+
+    <!-- Dialog Location -->
+
+    <string name="dialog_enable_location_title">Localización</string>
+    <string name="dialog_enable_location_content">Servicios de localización desactivados.¿Desea activarlos?</string>
+    <string name="dialog_enable_location_enable">Activar</string>
+    <string name="dialog_enable_location_cancel">Cancelar</string>
+
+
+    <!-- Dialog loading -->
+
+    <string name="dialog_loading_title">Obteniendo información</string>
+    <string name="dialog_loading_content">Obtieniendo información sobre la posición actual...</string>
+
+    <!-- Dialog network -->
+
+    <string name="dialog_network_title">Conexión Internet</string>
+    <string name="dialog_network_content_error">La aplicación necesita conexión a internet para obtener los datos. Por favor, actívela.</string>
+    <string name="dialog_network_content_activate">La aplicación vuelve a tener conexión a internet. ¿Desea actualizar los datos?</string>
+    <string name="dialog_network_accept">Aceptar</string>
+
+
+    <!-- ISS Pass  -->
+
+    <string formatted="false" name="row_next_pass_time">%s %d de %s a las %s</string>
+    <string formatted="false" name="row_next_pass_duration">Durante %d minutos y %d segundos</string>
+    <string name="row_next_pass_time_test">Lunes 1 de Diciembre a las 20:00</string>
+    <string name="row_next_pass_duration_test">Durante 20 minutos y 60 segundos</string>
+
+    <!--DetailPasseActivity -->
+
+
+
+</resources>

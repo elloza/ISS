@@ -10,6 +10,36 @@
     <string name="location_activity_address_not_found">Address not found</string>
     <string name="location_activity_location_not_set">Location not set yet</string>
     <string name="location_activity_you_are_in">You are in:</string>
+    <string name="location_activity_not_passes_availables">No passes availables</string>
+    <string name="location_activity_address_error">An error ocurred with geocoding</string>
+
+    <!-- Dialog Location -->
+
+    <string name="dialog_enable_location_title">GPS Settings</string>
+    <string name="dialog_enable_location_content">GPS is disabled in your device. Enable it?</string>
+    <string name="dialog_enable_location_enable">Enable GPS</string>
+    <string name="dialog_enable_location_cancel">Cancel</string>
+
+
+    <!-- Dialog loading -->
+
+    <string name="dialog_loading_title">Getting information</string>
+    <string name="dialog_loading_content">Getting information about current position...</string>
+
+    <!-- Dialog network -->
+
+    <string name="dialog_network_title">Network information</string>
+    <string name="dialog_network_content_error">The application needs internet connection to obtain the data. Please eneable internet connection</string>
+    <string name="dialog_network_content_activate">The application has internet again. Do you want update the date based in your current location?</string>
+    <string name="dialog_network_accept">Accept</string>
+
+    <!-- ISS Pass  -->
+
+    <string formatted="false" name="row_next_pass_time">%s %d of %s at %s</string>
+    <string formatted="false" name="row_next_pass_duration">During %d minutes and %d seconds</string>
+    <string name="row_next_pass_time_test">Monday 1 of December at 20:00</string>
+    <string name="row_next_pass_duration_test">During 20 minutes and 60 seconds</string>
+
 
     <!--DetailPasseActivity -->
 
