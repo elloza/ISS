@@ -1,6 +1,7 @@
 package com.lozasolutions.iss.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lozasolutions.iss.R;
-import com.lozasolutions.iss.activities.LocationActivity;
+import com.lozasolutions.iss.activities.DetailPassActivity;
 import com.lozasolutions.iss.models.ISSPass;
+import com.lozasolutions.iss.utils.controls.Constants;
+import com.lozasolutions.iss.utils.controls.Utils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -27,11 +30,11 @@ import java.util.TimeZone;
 public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesViewHolder> {
 
     private List<ISSPass> items = Collections.emptyList();
-    protected LocationActivity activity;
+    protected Context context;
 
     public PassesAdapter(List<ISSPass> items, Context context) {
         this.items = items;
-        this.activity = (LocationActivity) context;
+        this.context = context;
 
     }
 
@@ -66,15 +69,15 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         format.setTimeZone(TimeZone.getDefault());
 
-        String dayOfWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        String dayOfWeek = Utils.capitalize(calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
         String hourFormatted  = format.format(date);
 
 
 
-        holder.txtDuration.setText(String.format(activity.getResources().getConfiguration().locale,activity.getString(R.string.row_next_pass_duration),minutes,seconds));
-        holder.txtTime.setText(String.format(activity.getResources().getConfiguration().locale,activity.getString(R.string.row_next_pass_time),dayOfWeek,dayOfMonth,month,hourFormatted));
+        holder.txtDuration.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_duration),minutes,seconds));
+        holder.txtTime.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_time),dayOfWeek,dayOfMonth,month,hourFormatted));
         holder.setClickListener(viewListener);
 
     }
@@ -91,7 +94,10 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
 
             if (!isLongClick) {
 
-
+                ISSPass pass = items.get(pos);
+                Intent myIntent = new Intent(context, DetailPassActivity.class);
+                myIntent.putExtra(Constants.ISSPASS, pass);
+                v.getContext().startActivity(myIntent);
 
             }
         }

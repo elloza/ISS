@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,6 +21,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.github.pwittchen.networkevents.library.ConnectivityStatus;
 import com.github.pwittchen.networkevents.library.event.ConnectivityChanged;
 import com.lozasolutions.iss.R;
@@ -33,12 +39,17 @@ import com.lozasolutions.iss.utils.controls.Constants;
 import com.lozasolutions.iss.utils.controls.RecyclerViewEmptySupport;
 import com.lozasolutions.iss.utils.controls.Utils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 
-public class LocationActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     RecyclerViewEmptySupport recyclerView;
     MaterialDialog progress;
@@ -50,7 +61,8 @@ public class LocationActivity extends AppCompatActivity {
 
     //Current location
     private static Location currentLocation;
-    private String address;
+    private static String address;
+    private static PassesAdapter adapter;
 
     /**
      * Defines callbacks for service binding, passed to bindService()
@@ -82,7 +94,7 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //Title and subtitle
         toolbar.setTitle(getString(R.string.location_activity_toolbar_title));
@@ -93,16 +105,17 @@ public class LocationActivity extends AppCompatActivity {
         recyclerView.setEmptyView(findViewById(R.id.txtEmpty));
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
 
-        List<ISSPass> ISSPasses = new ArrayList<>();
+        if(adapter != null){
 
-        ISSPass ISSPass = new ISSPass(476L,1450609769L);
-        ISSPasses.add(ISSPass);
-        ISSPass ISSPass1 = new ISSPass(476L,1450999999L);
-        ISSPasses.add(ISSPass1);
+            recyclerView.setAdapter(adapter);
 
-        PassesAdapter adapter = new PassesAdapter(ISSPasses,this);
+        }else{
 
-        recyclerView.setAdapter(adapter);
+            List<ISSPass> ISSPasses = new ArrayList<>();
+            adapter = new PassesAdapter(ISSPasses,this);
+            recyclerView.setAdapter(adapter);
+
+        }
 
 
         txtAddress = (TextView) findViewById(R.id.txtAddress);
@@ -140,7 +153,6 @@ public class LocationActivity extends AppCompatActivity {
 
         //Register
         BaseApplication.getInstance().getBusWrapper().register(this);
-        BaseApplication.getInstance().getNetworkEvents().register();
 
         //BIND LOCATION SERVICE (This service is alive until the application is closed)
         BaseApplication.getInstance().bindService(new Intent(this, LocationService.class), locationConnection, Context.BIND_AUTO_CREATE);
@@ -150,7 +162,6 @@ public class LocationActivity extends AppCompatActivity {
     protected void onStop() {
 
         BaseApplication.getInstance().getBusWrapper().unregister(this);
-        BaseApplication.getInstance().getNetworkEvents().unregister();
         EventBus.getDefault().unregister(this);
 
         super.onStop();
@@ -164,7 +175,7 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_location, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -172,13 +183,16 @@ public class LocationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify a parent context in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        /* Ready for the settings
+
         if (id == R.id.action_settings) {
             return true;
         }
+
+        */
 
         return super.onOptionsItemSelected(item);
     }
@@ -325,6 +339,8 @@ public class LocationActivity extends AppCompatActivity {
             //If BaseApplication.getInstance().isInternetConnection() == null then is de first time of this event (always fires at start)
             if(currentLocation != null && BaseApplication.getInstance().isInternetConnection()!= null ){
 
+                //TODO: Ask to user or update info directly? (Check if the current info displayed is valid)
+
                 BaseApplication.getInstance().setInternetConnection(true);
                 new MaterialDialog.Builder(this)
                         .widgetColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
@@ -350,21 +366,6 @@ public class LocationActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * This method perform a reverse geocoding operation and a request to  ISS API to get passes.
      *
@@ -376,8 +377,8 @@ public class LocationActivity extends AppCompatActivity {
         //Dialog
         progress = new MaterialDialog.Builder(this)
                 .widgetColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .title(R.string.dialog_loading_title)
-                .content(R.string.dialog_loading_content)
+                .title(R.string.dialog_loading_iss_title)
+                .content(R.string.dialog_loading_iss_content)
                 .progress(true, 0)
                 .cancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -393,7 +394,63 @@ public class LocationActivity extends AppCompatActivity {
             //REVERSE GEODING
             locationService.reverseGeocoding(loc);
 
+            String uri = String.format( Constants.ISS_URL, String.format(Locale.US, "%.6f", loc.getLatitude()), String.format(Locale.US, "%.6f", loc.getLongitude()));
+
             //ISS API INFO
+
+            StringRequest getRequest = new StringRequest(Request.Method.GET,uri,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                String message = jsonResponse.getString("message");
+                                JSONObject request = jsonResponse.getJSONObject("request");
+                                Double longitude = request.getDouble("longitude");
+                                Double latitude = request.getDouble("latitude");
+                                JSONArray responseArray = jsonResponse.getJSONArray("response");
+
+                                List<ISSPass> issPasses = new ArrayList<>();
+
+                                for(int i = 0; i < responseArray.length();i++){
+
+                                    JSONObject iss = (JSONObject)responseArray.get(i);
+                                    Long duration = iss.getLong("duration");
+                                    Long risetime = iss.getLong("risetime");
+
+                                    ISSPass issPass = new ISSPass(duration,risetime,longitude.floatValue(),latitude.floatValue(),address);
+
+                                    issPasses.add(issPass);
+
+                                }
+
+                                adapter = new PassesAdapter(issPasses,getApplicationContext());
+
+                                recyclerView.setAdapter(adapter);
+
+                                adapter.notifyDataSetChanged();
+
+
+                            } catch (JSONException e) {
+
+                                e.printStackTrace();
+
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+
+                            Log.e("Err",error.networkResponse.data.toString());
+                            error.printStackTrace();
+
+
+                        }
+                    }
+            );
+            BaseApplication.getInstance().getRequestQueue().add(getRequest);
 
 
         }else{
@@ -419,5 +476,8 @@ public class LocationActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }

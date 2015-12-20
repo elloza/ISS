@@ -78,4 +78,13 @@ public class Utils {
         };
     }
 
+    public static String capitalize(final String line) {
+        if(line.length() > 1){
+            return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+        }else{
+            return line;
+        }
+
+    }
+
 }

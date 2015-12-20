@@ -2,7 +2,7 @@
 
     <string name="app_name">ISS</string>
 
-    <!--LocationActivity -->
+    <!--HomeActivity -->
     <string name="location_activity_action_settings">Opciones</string>
     <string name="location_activity_action_info_licenses">Licencias</string>
     <string name="location_activity_toolbar_title">Próximos sobrevuelos</string>
@@ -35,12 +35,22 @@
 
     <!-- ISS Pass  -->
 
-    <string formatted="false" name="row_next_pass_time">%s %d de %s a las %s</string>
+    <string formatted="false" name="row_next_pass_time">%s %d de %s a las \n%s</string>
     <string formatted="false" name="row_next_pass_duration">Durante %d minutos y %d segundos</string>
-    <string name="row_next_pass_time_test">Lunes 1 de Diciembre a las 20:00</string>
+    <string name="row_next_pass_time_test">Lunes 1 de Diciembre a las \n 20:00</string>
     <string name="row_next_pass_duration_test">Durante 20 minutos y 60 segundos</string>
 
     <!--DetailPasseActivity -->
+    <string name="detail_pass_title">Próximos sobrevuelos</string>
+    <string name="detail_pass_numbers_no_info">Información sobre el número no disponible.</string>
+    <string name="detail_pass_until_next">Hasta el sobrevuelo quedan:</string>
+    <string name="detail_pass_seconds">segundos</string>
+
+    <!-- Dialog loading Numbers info -->
+
+    <string name="dialog_loading_numbers_title">Numbers API</string>
+    <string name="dialog_loading_numbers_content">Obteniendo información acerca del número de la duración del sobrevuelo...</string>
+
 
 
 

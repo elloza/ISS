@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".LocationActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/CustomToolbarTheme"
+        app:popupTheme="@style/CustomPopupToolbarTheme"
+        >
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/gray"
+            android:weightSum="1"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:textAlignment="center"
+            app:layout_heightPercent="15%"
+            app:layout_marginLeftPercent="0%"
+            app:layout_marginTopPercent="0%"
+            app:layout_widthPercent="100%">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.2"
+                android:paddingLeft="5dp"
+                android:text="@string/location_activity_you_are_in"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/txtAddress"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:gravity="left"
+                android:text="@string/location_activity_location_not_set"
+                android:textColor="@android:color/white" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:weightSum="1"
+            android:gravity="center"
+            android:textAlignment="center"
+            app:layout_heightPercent="25%"
+            app:layout_marginLeftPercent="5%"
+            app:layout_marginTopPercent="20%"
+            app:layout_widthPercent="90%"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.2"
+                android:text="@string/detail_pass_until_next"
+                android:textColor="@color/gray" />
+
+
+            <com.lozasolutions.iss.utils.controls.AutoResizeHeightTextView
+                android:id="@+id/txtCountDown"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center|left"
+                android:layout_weight="0.6"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/txtDuration"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.2"
+                android:text="@string/detail_pass_numbers_no_info"
+                android:textColor="@color/gray" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/magenta"
+            android:weightSum="1"
+            android:gravity="center"
+            android:textAlignment="center"
+            app:layout_heightPercent="26%"
+            app:layout_marginLeftPercent="0%"
+            app:layout_marginTopPercent="75%"
+            app:layout_widthPercent="100%">
+
+
+            <TextView
+                android:id="@+id/txtNumbersAPI"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.2"
+                android:padding="10dp"
+                android:text="@string/detail_pass_numbers_no_info"
+                android:textColor="@android:color/white" />
+
+
+
+        </LinearLayout>
+
+    </android.support.percent.PercentRelativeLayout>
+
+
+</LinearLayout>

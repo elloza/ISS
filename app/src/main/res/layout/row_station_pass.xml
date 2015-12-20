@@ -32,8 +32,8 @@
             android:id="@+id/txtTime"
             android:textStyle="bold"
             android:textColor="@android:color/black"
-            android:gravity="left|center"
-            android:layout_weight="0.5"
+            android:gravity="left|bottom"
+            android:layout_weight="0.6"
             />
 
         <TextView
@@ -42,7 +42,7 @@
             android:text="@string/row_next_pass_duration_test"
             android:id="@+id/txtDuration"
             android:gravity="left|top"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.4" />
     </LinearLayout>
 
 
