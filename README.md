@@ -1,2 +1,3 @@
 # ISS
-La aplicación servirá para ayudar a los usuarios a ver la ISS (Estación Espacial Internacional), informándoles de cuándo realizará un sobrevuelo por encima de su posición.
+
+The application will be used to help users to see the ISS ( International Space Station ) , informing them of when perform a pass over his position.
