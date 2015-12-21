@@ -3,9 +3,7 @@ package com.lozasolutions.iss.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Loza on 19/12/2015.
- */
+
 public class ISSPass implements Parcelable {
 
     Long duration;

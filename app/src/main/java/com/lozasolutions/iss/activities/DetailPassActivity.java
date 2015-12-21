@@ -38,9 +38,10 @@ import de.greenrobot.event.EventBus;
 public class DetailPassActivity extends AppCompatActivity {
 
     MaterialDialog progress;
-    TextView txtAddress,txtNumbersAPI,txtCountDown,txtDuration;
+    TextView txtAddress, txtNumbersAPI, txtCountDown, txtDuration;
     ISSPass issPass;
     CountDownTimer countDownTimer;
+    static String numbersAPI;
 
 
     @Override
@@ -62,7 +63,7 @@ public class DetailPassActivity extends AppCompatActivity {
 
         //TxtAddress
         txtAddress = (TextView) findViewById(R.id.txtAddress);
-        if(issPass.getAddress() != null){
+        if (issPass.getAddress() != null) {
             txtAddress.setText(issPass.getAddress());
         }
 
@@ -71,9 +72,9 @@ public class DetailPassActivity extends AppCompatActivity {
 
         Date currentDate = new Date();
 
-        Date issDate = new Date(issPass.getRisetime()*1000);
+        Date issDate = new Date(issPass.getRisetime() * 1000);
 
-        long seconds = (issDate.getTime()-currentDate.getTime())/1000;
+        long seconds = (issDate.getTime() - currentDate.getTime()) / 1000;
 
         String secondsValue = String.valueOf(seconds);
         String secondsTxt = getString(R.string.detail_pass_seconds);
@@ -81,16 +82,16 @@ public class DetailPassActivity extends AppCompatActivity {
         String countdownSeconds = secondsValue + secondsTxt;
         SpannableString styledString = new SpannableString(countdownSeconds);
         //Seconds
-        styledString.setSpan(new StyleSpan(Typeface.BOLD), countdownSeconds.indexOf(secondsValue), countdownSeconds.indexOf(secondsValue)+secondsValue.length(), 0);
+        styledString.setSpan(new StyleSpan(Typeface.BOLD), countdownSeconds.indexOf(secondsValue), countdownSeconds.indexOf(secondsValue) + secondsValue.length(), 0);
 
         //Seconds txt
-        styledString.setSpan(new RelativeSizeSpan(0.5f), countdownSeconds.indexOf(secondsTxt), countdownSeconds.indexOf(secondsTxt)+secondsTxt.length(), 0);
-        styledString.setSpan(new StyleSpan(Typeface.NORMAL), countdownSeconds.indexOf(secondsTxt), countdownSeconds.indexOf(secondsTxt)+secondsTxt.length(), 0);
+        styledString.setSpan(new RelativeSizeSpan(0.5f), countdownSeconds.indexOf(secondsTxt), countdownSeconds.indexOf(secondsTxt) + secondsTxt.length(), 0);
+        styledString.setSpan(new StyleSpan(Typeface.NORMAL), countdownSeconds.indexOf(secondsTxt), countdownSeconds.indexOf(secondsTxt) + secondsTxt.length(), 0);
         styledString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.gray)), countdownSeconds.indexOf(secondsTxt), countdownSeconds.indexOf(secondsTxt) + secondsTxt.length(), 0);
 
         txtCountDown.setText(styledString);
 
-        if(countDownTimer == null) {
+        if (countDownTimer == null) {
 
             countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
 
@@ -140,16 +141,24 @@ public class DetailPassActivity extends AppCompatActivity {
         //Txt Duration
         txtDuration = (TextView) findViewById(R.id.txtDuration);
 
-        Long durationMinutes = issPass.getDuration()/60L;
-        Long durationSeconds = issPass.getDuration()%60;
+        Long durationMinutes = issPass.getDuration() / 60L;
+        Long durationSeconds = issPass.getDuration() % 60;
 
-        txtDuration.setText(String.format(getResources().getConfiguration().locale,getString(R.string.row_next_pass_duration),durationMinutes,durationSeconds));
+        txtDuration.setText(String.format(getResources().getConfiguration().locale, getString(R.string.row_next_pass_duration), durationMinutes, durationSeconds));
 
         //Numbers API
         txtNumbersAPI = (TextView) findViewById(R.id.txtNumbersAPI);
 
-        getNumbersData(issPass.getDuration());
+        //Change orientation or new activity (avoid request)
+        if(numbersAPI == null){
 
+            getNumbersData(issPass.getDuration());
+
+        }else{
+
+            txtNumbersAPI.setText(numbersAPI);
+
+        }
 
     }
 
@@ -178,6 +187,12 @@ public class DetailPassActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if(isFinishing()){
+
+            numbersAPI = null;
+
+        }
     }
 
     @Override
@@ -215,7 +230,7 @@ public class DetailPassActivity extends AppCompatActivity {
             BaseApplication.getInstance().setInternetConnection(true);
 
             //If BaseApplication.getInstance().isInternetConnection() == null then is de first time of this event (always fires at start)
-            if(BaseApplication.getInstance().isInternetConnection()!= null ){
+            if (BaseApplication.getInstance().isInternetConnection() != null) {
 
                 BaseApplication.getInstance().setInternetConnection(true);
                 new MaterialDialog.Builder(this)
@@ -263,23 +278,22 @@ public class DetailPassActivity extends AppCompatActivity {
                 .show();
 
         //Check network status
-        if(BaseApplication.getInstance().isInternetConnection() != null && BaseApplication.getInstance().isInternetConnection()) {
+        if (BaseApplication.getInstance().isInternetConnection() != null && BaseApplication.getInstance().isInternetConnection()) {
 
             //Numbers API
             //TODO: Call Numbers API
 
-            String uri = String.format( Constants.NUMBERS_URL, number);
+            String uri = String.format(Constants.NUMBERS_URL, number);
 
             //ISS API INFO
 
-            StringRequest getRequest = new StringRequest(Request.Method.GET,uri,
+            StringRequest getRequest = new StringRequest(Request.Method.GET, uri,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
 
-
-                                txtNumbersAPI.setText(response);
-
+                            numbersAPI = response;
+                            txtNumbersAPI.setText(response);
                             progress.dismiss();
 
                         }
@@ -287,7 +301,6 @@ public class DetailPassActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
 
                             Log.e("Err", error.networkResponse.data.toString());
                             error.printStackTrace();
@@ -299,10 +312,7 @@ public class DetailPassActivity extends AppCompatActivity {
             BaseApplication.getInstance().getRequestQueue().add(getRequest);
 
 
-
-
-
-        }else{
+        } else {
 
             progress.dismiss();
 
@@ -327,7 +337,6 @@ public class DetailPassActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-
 
 
 }

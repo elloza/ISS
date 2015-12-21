@@ -14,7 +14,6 @@
     <string name="location_activity_address_error">An error ocurred with geocoding</string>
 
     <!-- Dialog Location -->
-
     <string name="dialog_enable_location_title">GPS Settings</string>
     <string name="dialog_enable_location_content">GPS is disabled in your device. Enable it?</string>
     <string name="dialog_enable_location_enable">Enable GPS</string>
@@ -22,7 +21,6 @@
 
 
     <!-- Dialog loading ISS info -->
-
     <string name="dialog_loading_iss_title">Getting information</string>
     <string name="dialog_loading_iss_content">Getting information about current position...</string>
 
@@ -34,7 +32,6 @@
     <string name="dialog_network_accept">Accept</string>
 
     <!-- ISS Pass  -->
-
     <string formatted="false" name="row_next_pass_time">%s %d of %s at \n%s</string>
     <string formatted="false" name="row_next_pass_duration">During %d minutes and %d seconds</string>
     <string name="row_next_pass_time_test">Monday 1 of December at \n20:00</string>
@@ -48,7 +45,6 @@
 
 
     <!-- Dialog loading Numbers info -->
-
     <string name="dialog_loading_numbers_title">Numbers API</string>
     <string name="dialog_loading_numbers_content">Getting information about current duration number...</string>
 

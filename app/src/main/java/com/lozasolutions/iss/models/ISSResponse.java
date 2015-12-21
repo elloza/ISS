@@ -5,9 +5,7 @@ import android.location.Location;
 
 import java.util.List;
 
-/**
- * Created by Loza on 19/12/2015.
- */
+
 public class ISSResponse {
 
     Location location;

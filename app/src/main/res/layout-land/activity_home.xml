@@ -2,22 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".LocationActivity">
 
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:theme="@style/CustomToolbarTheme"
         app:popupTheme="@style/CustomPopupToolbarTheme"
-        >
+        app:theme="@style/CustomToolbarTheme">
 
     </android.support.v7.widget.Toolbar>
 
@@ -35,10 +34,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/gray"
-            android:weightSum="1"
             android:gravity="center"
             android:paddingTop="10dp"
             android:textAlignment="center"
+            android:weightSum="1"
             app:layout_heightPercent="15%"
             app:layout_marginLeftPercent="0%"
             app:layout_marginTopPercent="0%"
@@ -81,9 +80,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/location_activity_not_passes_availables"
-            android:visibility="invisible"
-            android:textColor="@android:color/darker_gray" />
-
+            android:textColor="@android:color/darker_gray"
+            android:visibility="invisible" />
 
 
     </android.support.percent.PercentRelativeLayout>

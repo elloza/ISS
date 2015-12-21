@@ -2,7 +2,6 @@ package com.lozasolutions.iss.activities;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
@@ -60,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     static boolean locationServiceBound = false;
 
     //Current location
+    //TODO: Change statics vars
     private static Location currentLocation;
     private static String address;
     private static PassesAdapter adapter;
@@ -87,9 +87,6 @@ public class HomeActivity extends AppCompatActivity {
     };
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -100,27 +97,29 @@ public class HomeActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.location_activity_toolbar_title));
         setSupportActionBar(toolbar);
 
+        //Recyclerview
         recyclerView = (RecyclerViewEmptySupport) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setEmptyView(findViewById(R.id.txtEmpty));
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
 
-        if(adapter != null){
+        if (adapter != null) {
 
             recyclerView.setAdapter(adapter);
 
-        }else{
+        } else {
 
             List<ISSPass> ISSPasses = new ArrayList<>();
-            adapter = new PassesAdapter(ISSPasses,this);
+            adapter = new PassesAdapter(ISSPasses, this);
             recyclerView.setAdapter(adapter);
 
         }
 
 
+        //TxtAddress
         txtAddress = (TextView) findViewById(R.id.txtAddress);
 
-        if(address != null){
+        if (address != null) {
             txtAddress.setText(address);
         }
 
@@ -131,15 +130,12 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-
-        //TODO: Toolbar
-        //http://www.hermosaprogramacion.com/2015/06/toolbar-en-android-creacion-de-action-bar-en-material-design/
-        //http://stackoverflow.com/questions/26651602/display-back-arrow-on-toolbar-android
-        //https://www.youtube.com/watch?v=4XfDDfa3rv8
-        //http://developer.android.com/intl/es/training/appbar/up-action.html
-        //http://www.sgoliver.net/blog/actionbar-appbar-toolbars-en-android-i/
+    }
 
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
 
@@ -149,7 +145,6 @@ public class HomeActivity extends AppCompatActivity {
 
         //Default Bus Event
         EventBus.getDefault().register(this);
-
 
         //Register
         BaseApplication.getInstance().getBusWrapper().register(this);
@@ -161,6 +156,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
 
+        //Unregister events
         BaseApplication.getInstance().getBusWrapper().unregister(this);
         EventBus.getDefault().unregister(this);
 
@@ -198,42 +194,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    public void requestUserEnableLocation() {
-
-        new MaterialDialog.Builder(this)
-                .widgetColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
-                .title(R.string.dialog_enable_location_title)
-                .content(R.string.dialog_enable_location_content)
-                .positiveText(R.string.dialog_enable_location_enable)
-                .negativeText(R.string.dialog_enable_location_cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        //Go to monitor
-                        dialog.dismiss();
-
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-
-                        Intent callGPSSettingIntent = new Intent(
-                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(callGPSSettingIntent);
-                    }
-                })
-                .show();
-
-    }
-
-
 
     ///-------------------------------EVENTS OF EVENT BUS ----------------------------------------------------
 
 
     /**
-     *
      * Event called when an operation of reverse geocoding is called.
      *
      * @param event Parameter containing the result of the operation.
@@ -298,7 +263,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     *
      * Event called when a new location is available. This event is executed in the MainThread.
      *
      * @param event Parameter containing the new location.
@@ -306,7 +270,7 @@ public class HomeActivity extends AppCompatActivity {
     public void onEventMainThread(NewLocationEvent event) {
 
         //TODO Request to user to update the data
-        if(event.location != null) {
+        if (event.location != null) {
 
             if (currentLocation == null) {
 
@@ -319,9 +283,9 @@ public class HomeActivity extends AppCompatActivity {
                 //TODO ASK to user if want to update the data (if location is far away)
 
             }
-        }else{
+        } else {
 
-            //TODO NO LOCATION AVAILABLE
+            //TODO NO LOCATION AVAILABLE Inform user
 
 
         }
@@ -329,6 +293,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    /**
+     *
+     * This Event is raised when a change in internet connection is produced
+     *
+     * @param event
+     */
     public void onEvent(ConnectivityChanged event) {
         ConnectivityStatus status = event.getConnectivityStatus();
 
@@ -337,7 +307,7 @@ public class HomeActivity extends AppCompatActivity {
             BaseApplication.getInstance().setInternetConnection(true);
 
             //If BaseApplication.getInstance().isInternetConnection() == null then is de first time of this event (always fires at start)
-            if(currentLocation != null && BaseApplication.getInstance().isInternetConnection()!= null ){
+            if (currentLocation != null && BaseApplication.getInstance().isInternetConnection() != null) {
 
                 //TODO: Ask to user or update info directly? (Check if the current info displayed is valid)
 
@@ -366,9 +336,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    ///-------------------------------OTHER FUNCTIONS ----------------------------------------------------
+
+
     /**
      * This method perform a reverse geocoding operation and a request to  ISS API to get passes.
-     *
      *
      * @param loc location to search.
      */
@@ -380,29 +352,24 @@ public class HomeActivity extends AppCompatActivity {
                 .title(R.string.dialog_loading_iss_title)
                 .content(R.string.dialog_loading_iss_content)
                 .progress(true, 0)
-                .cancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        //TODO: Some message to user?
-                    }
-                })
                 .show();
 
         //Check network status
-        if(BaseApplication.getInstance().isInternetConnection() != null && BaseApplication.getInstance().isInternetConnection()) {
+        if (BaseApplication.getInstance().isInternetConnection() != null && BaseApplication.getInstance().isInternetConnection()) {
 
             //REVERSE GEODING
             locationService.reverseGeocoding(loc);
 
-            String uri = String.format( Constants.ISS_URL, String.format(Locale.US, "%.6f", loc.getLatitude()), String.format(Locale.US, "%.6f", loc.getLongitude()));
+            String uri = String.format(Constants.ISS_URL, String.format(Locale.US, "%.6f", loc.getLatitude()), String.format(Locale.US, "%.6f", loc.getLongitude()));
 
             //ISS API INFO
 
-            StringRequest getRequest = new StringRequest(Request.Method.GET,uri,
+            StringRequest getRequest = new StringRequest(Request.Method.GET, uri,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             try {
+                                //TODO Use GSON or Jackson to parse responses
                                 JSONObject jsonResponse = new JSONObject(response);
                                 String message = jsonResponse.getString("message");
                                 JSONObject request = jsonResponse.getJSONObject("request");
@@ -412,23 +379,26 @@ public class HomeActivity extends AppCompatActivity {
 
                                 List<ISSPass> issPasses = new ArrayList<>();
 
-                                for(int i = 0; i < responseArray.length();i++){
+                                for (int i = 0; i < responseArray.length(); i++) {
 
-                                    JSONObject iss = (JSONObject)responseArray.get(i);
+                                    JSONObject iss = (JSONObject) responseArray.get(i);
                                     Long duration = iss.getLong("duration");
                                     Long risetime = iss.getLong("risetime");
 
-                                    ISSPass issPass = new ISSPass(duration,risetime,longitude.floatValue(),latitude.floatValue(),address);
-
+                                    ISSPass issPass = new ISSPass(duration, risetime, longitude.floatValue(), latitude.floatValue(), address);
                                     issPasses.add(issPass);
 
                                 }
 
-                                adapter = new PassesAdapter(issPasses,getApplicationContext());
+                                adapter = new PassesAdapter(issPasses, getApplicationContext());
 
                                 recyclerView.setAdapter(adapter);
 
                                 adapter.notifyDataSetChanged();
+
+                                if(progress.isShowing()){
+                                    progress.dismiss();
+                                }
 
 
                             } catch (JSONException e) {
@@ -442,20 +412,21 @@ public class HomeActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
-
-                            Log.e("Err",error.networkResponse.data.toString());
+                            //TODO: Inform error to user
+                            Log.e("Err", error.networkResponse.data.toString());
                             error.printStackTrace();
 
 
                         }
                     }
             );
+
             BaseApplication.getInstance().getRequestQueue().add(getRequest);
 
 
-        }else{
+        } else {
 
-            EventBus.getDefault().post(new ReverseGeocodingEvent(loc,"",Constants.REVERSE_GEOCODING_NOT_FOUND));
+            EventBus.getDefault().post(new ReverseGeocodingEvent(loc, "", Constants.REVERSE_GEOCODING_NOT_FOUND));
 
             progress.dismiss();
 
@@ -476,8 +447,36 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+
+    public void requestUserEnableLocation() {
+
+        new MaterialDialog.Builder(this)
+                .widgetColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+                .title(R.string.dialog_enable_location_title)
+                .content(R.string.dialog_enable_location_content)
+                .positiveText(R.string.dialog_enable_location_enable)
+                .negativeText(R.string.dialog_enable_location_cancel)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        //Go to monitor
+                        dialog.dismiss();
+
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                        Intent callGPSSettingIntent = new Intent(
+                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(callGPSSettingIntent);
+                    }
+                })
+                .show();
+
     }
+
+
+
 }

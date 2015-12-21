@@ -14,9 +14,7 @@ import com.lozasolutions.iss.utils.controls.Utils;
 
 import de.greenrobot.event.EventBus;
 
-/**
- * Created by Loza on 19/12/2015.
- */
+
 public class BaseApplication extends Application {
 
     private RequestQueue requestQueue;

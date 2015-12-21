@@ -99,18 +99,12 @@ public class LocationService extends Service implements
 
         if (location != null) {
 
-
-            //Check if distance > DISTANCE_BETWEEN_LOCATIONS
-
-
+            //TODO: Check if distance > DISTANCE_BETWEEN_LOCATIONS
             EventBus.getDefault().post(new NewLocationEvent(location));
-
 
         }
 
-
         previousLocation = location;
-
 
         Log.d(TAG, "position: " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
 
@@ -145,10 +139,10 @@ public class LocationService extends Service implements
 
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-        if(lastLocation != null){
+        if (lastLocation != null) {
             previousLocation = lastLocation;
             EventBus.getDefault().post(new NewLocationEvent(lastLocation));
-        }else{
+        } else {
             //Send null location to request user active some location mode
             EventBus.getDefault().post(new NewLocationEvent(lastLocation));
         }
@@ -296,7 +290,7 @@ public class LocationService extends Service implements
 
                 }
 
-            }else{
+            } else {
                 EventBus.getDefault().post(new ReverseGeocodingEvent(location, "", Constants.REVERSE_GEOCODING_ERROR));
 
             }

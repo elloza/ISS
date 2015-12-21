@@ -36,7 +36,7 @@ public class AutoResizeTextView extends TextView {
         super(context, attrs);
 
         if (!isInEditMode()) {
-        init();
+            init();
         }
     }
 
@@ -64,11 +64,11 @@ public class AutoResizeTextView extends TextView {
                 super.onDraw(canvas);
             }
 
-        }else{
-             super.onDraw(canvas);
+        } else {
+            super.onDraw(canvas);
 
 
-            }
+        }
     }
 
     public void adaptTextSize() {
@@ -130,8 +130,6 @@ public class AutoResizeTextView extends TextView {
         mSpacingMult = mult;
         mSpacingAdd = add;
     }
-
-
 
 
 }

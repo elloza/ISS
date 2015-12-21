@@ -10,16 +10,14 @@ import com.github.pwittchen.networkevents.library.BusWrapper;
 
 import de.greenrobot.event.EventBus;
 
-/**
- * Created by Loza on 19/12/2015.
- */
+
 public class Utils {
 
     public static boolean isLocationEnabled(Context context) {
         int locationMode = 0;
         String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
@@ -29,7 +27,7 @@ public class Utils {
 
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;
 
-        }else{
+        } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
@@ -40,7 +38,7 @@ public class Utils {
         int locationMode = 0;
         String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
@@ -50,7 +48,7 @@ public class Utils {
 
             return locationMode != Settings.Secure.LOCATION_MODE_HIGH_ACCURACY;
 
-        }else{
+        } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
@@ -79,9 +77,9 @@ public class Utils {
     }
 
     public static String capitalize(final String line) {
-        if(line.length() > 1){
+        if (line.length() > 1) {
             return Character.toUpperCase(line.charAt(0)) + line.substring(1);
-        }else{
+        } else {
             return line;
         }
 

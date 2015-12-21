@@ -24,9 +24,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 
-/**
- * Created by Alberto on 17/11/2015.
- */
+
 public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesViewHolder> {
 
     private List<ISSPass> items = Collections.emptyList();
@@ -56,13 +54,13 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
 
         //Get pass
         ISSPass issPass = items.get(position);
-        Long millis = issPass.getRisetime()*1000L;
+        Long millis = issPass.getRisetime() * 1000L;
 
         Timestamp stamp = new Timestamp(millis);
         Date date = new Date(stamp.getTime());
 
-        Long minutes = issPass.getDuration()/60L;
-        Long seconds = issPass.getDuration()%60;
+        Long minutes = issPass.getDuration() / 60L;
+        Long seconds = issPass.getDuration() % 60;
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -72,12 +70,11 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
         String dayOfWeek = Utils.capitalize(calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
-        String hourFormatted  = format.format(date);
+        String hourFormatted = format.format(date);
 
 
-
-        holder.txtDuration.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_duration),minutes,seconds));
-        holder.txtTime.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_time),dayOfWeek,dayOfMonth,month,hourFormatted));
+        holder.txtDuration.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_duration), minutes, seconds));
+        holder.txtTime.setText(String.format(context.getResources().getConfiguration().locale, context.getString(R.string.row_next_pass_time), dayOfWeek, dayOfMonth, month, hourFormatted));
         holder.setClickListener(viewListener);
 
     }
@@ -95,7 +92,7 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
             if (!isLongClick) {
 
                 ISSPass pass = items.get(pos);
-                Intent myIntent = new Intent(context, DetailPassActivity.class);
+                Intent myIntent = new Intent(v.getContext(), DetailPassActivity.class);
                 myIntent.putExtra(Constants.ISSPASS, pass);
                 v.getContext().startActivity(myIntent);
 
@@ -106,7 +103,7 @@ public class PassesAdapter extends RecyclerView.Adapter<PassesAdapter.PassesView
 
     static class PassesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        private TextView txtDuration,txtTime;
+        private TextView txtDuration, txtTime;
         private ClickListener clickListener;
 
         public PassesViewHolder(View itemView) {
